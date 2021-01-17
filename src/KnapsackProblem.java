@@ -1,51 +1,63 @@
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class KnapsackProblem {
 
+    int bestK, n, L;
+    ArrayList<Integer> items;
+    int[] bestX, currX;
+    HashMap<Pair, Boolean> state;
 
+    public KnapsackProblem(int num) {
+
+        bestK = -1;
+        state = new HashMap();
+        L = num;
+        items = new ArrayList();
+
+    }
+
+    public void dynamicSolve(int currK, int currS) {
+
+        int totalWeight = 0;
+
+        if (currK > bestK) {
+            bestK = currK;
+            bestX = Arrays.copyOf(currX, n);
+        }
+
+    }
 
     public static void main(String[] args) throws IOException {
 
         Knapsack k = new Knapsack();
-        FileReader fr = new FileReader(args[0]);
-        BufferedReader br = new BufferedReader(fr);
+        File f = new File(args[0]);
+        Scanner s = new Scanner(f);
 
         System.out.println(args[0]);
-        int numItems = Integer.parseInt(br.readLine().replaceAll("\\s", ""));
-
+        int numItems = Integer.parseInt(s.next());
         System.out.println(numItems);
-        String[][] tmp = new String[numItems][3];
+        String[][] strArr = new String[numItems][3];
 
         for (int i = 0 ; i < numItems ; ++i) {
 
-            System.out.println(i);
-
-            String curLine = br.readLine();
-
-            for (int j = 0 ; j < curLine.length() ; ++j) {
-
-                int cnt = 0;
-                if (curLine.charAt(i) != ' ') {
-
-                    tmp[i][cnt] = tmp[i][cnt] + curLine.charAt(i);
-
-                } else ++cnt; System.out.println(Arrays.deepToString(tmp));
-
-            }
-
+            strArr[i][0] = s.next();
+            strArr[i][1] = s.next();
+            strArr[i][2] = s.next();
 
         }
 
-        int capacity = br.read();
+        System.out.println(Arrays.deepToString(strArr));
+        KnapsackProblem kp = new KnapsackProblem(numItems);
 
         if (args[1].equals("F")) {
 
-            System.out.println("TRUE");
+            kp.dynamicSolve();
 
         }
 
