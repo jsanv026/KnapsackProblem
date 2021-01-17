@@ -8,17 +8,18 @@ import java.util.HashMap;
 
 public class KnapsackProblem {
 
-    int bestK, n, L;
-    ArrayList<Integer> items;
-    int[] bestX, currX;
-    HashMap<Pair, Boolean> state;
+    private int bestK, n, L;
+    private int[] bestX, currX;
+    private Knapsack knapsack;
+    //HashMap<Pair, Boolean> state;
 
-    public KnapsackProblem(int num) {
+    public KnapsackProblem(Knapsack k) {
 
         bestK = -1;
-        state = new HashMap();
-        L = num;
-        items = new ArrayList();
+        this.knapsack = k;
+        //state = new HashMap();
+        n = k.getCapacity();
+        this.currX = currX;
 
     }
 
@@ -26,40 +27,34 @@ public class KnapsackProblem {
 
         int totalWeight = 0;
 
-        if (currK > bestK) {
-            bestK = currK;
-            bestX = Arrays.copyOf(currX, n);
-        }
+        return;
 
     }
 
+    public Knapsack getKnapsack() { return knapsack; }
+
+    ///////////////////////////// Main ////////////////////////////////
+
     public static void main(String[] args) throws IOException {
 
-        Knapsack k = new Knapsack();
         File f = new File(args[0]);
         Scanner s = new Scanner(f);
 
-        System.out.println(args[0]);
         int numItems = Integer.parseInt(s.next());
-        System.out.println(numItems);
-        String[][] strArr = new String[numItems][3];
+        Item[] items = new Item[numItems];
 
         for (int i = 0 ; i < numItems ; ++i) {
 
-            strArr[i][0] = s.next();
-            strArr[i][1] = s.next();
-            strArr[i][2] = s.next();
+            Item item = new Item(s.next(), s.nextInt(), s.nextInt());
+            items[i] = item;
 
         }
 
-        System.out.println(Arrays.deepToString(strArr));
-        KnapsackProblem kp = new KnapsackProblem(numItems);
+        Knapsack k = new Knapsack(items, s.nextInt());
+        KnapsackProblem kp = new KnapsackProblem(k);
 
-        if (args[1].equals("F")) {
-
-            kp.dynamicSolve();
-
-        }
+        if (args[1].equals("D")) { kp.dynamicSolve(0,0); kp.getKnapsack().display(); }
+        else if (args[1].equals("F")) { return; }
 
     }
 
