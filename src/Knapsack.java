@@ -17,8 +17,10 @@ public class Knapsack {
 
     public void display() {
 
-        System.out.println("----- Capacity: " + capacity + " -----");
-        for (int i = 0 ; i < items.length ; ++i) { System.out.println("--> " + items[i].getName() + " " + items[i].getValue() + " " + items[i].getWeight()); }
+        System.out.println("\n----- Capacity: " + capacity + " -----");
+        System.out.println(" Name | Value | Weight \n");
+        for (int i = 0 ; i < items.length ; ++i) { System.out.println("--> " + items[i].getName() + "  " + items[i].getValue() + "  " + items[i].getWeight()); }
+        System.out.println("\n--------------------");
 
     }
 
