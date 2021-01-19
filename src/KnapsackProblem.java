@@ -3,32 +3,58 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 
 public class KnapsackProblem {
 
-    private int bestK, n, L;
-    private int[] bestX, currX;
+    private int capacity, numItems;
     private Knapsack knapsack;
-    //HashMap<Pair, Boolean> state;
 
     public KnapsackProblem(Knapsack k) {
 
-        bestK = -1;
         this.knapsack = k;
-        //state = new HashMap();
-        n = k.getCapacity();
-        this.currX = currX;
+        capacity = k.getCapacity();
+        numItems = k.size();
 
     }
 
-    public void dynamicSolve(int currK, int currS) {
+    public int dynamicSolve() {
 
-        int totalWeight = 0;
+        int[] values = knapsack.getValues();
+        int[] weights = knapsack.getWeights();
+        KTable table = new KTable(numItems + 1, capacity + 1);
+        StringBuilder sb = new StringBuilder();
 
-        return;
+        // Taken from geeksforgeeks.org with minor tweaks ---> https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
+        for (int i = 0 ; i <= numItems ; i++) {
+            System.out.println("i: " + i);
+            for (int j = 0 ; j <= capacity ; j++) {
 
+                if (i == 0 || j == 0) { table.get()[i][j] = 0; }
+                else if (weights[i - 1] <= j) { table.get()[i][j] = Math.max(values[i - 1] + table.get()[i - 1][j - weights[i - 1]], table.get()[i - 1][j]); }
+                else { table.get()[i][j] = table.get()[i - 1][j]; }
+
+            }
+        }
+
+        int[] selected = new int[numItems + 1];
+        int tmp = capacity;
+        int j = 0;
+        for (int i = numItems ; i > 0 ; --i){
+            if ((tmp - weights[i - 1] >= 0) && (table.get()[i][tmp] - table.get()[i - 1][tmp - weights[i - 1]] == values[i - 1])) {
+                selected[j++] = i - 1;
+                tmp -= weights[i - 1];
+            }
+        }
+
+        for (int i = j - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
+
+        return table.get()[numItems][capacity];
+
+    }
+
+    public int bruteForce() {
+
+        return 0;
     }
 
     public Knapsack getKnapsack() { return knapsack; }
@@ -52,8 +78,12 @@ public class KnapsackProblem {
 
         Knapsack k = new Knapsack(items, s.nextInt());
         KnapsackProblem kp = new KnapsackProblem(k);
+        kp.getKnapsack().display();
 
-        if (args[1].equals("D")) { kp.dynamicSolve(0,0); kp.getKnapsack().display(); }
+        if (args[1].equals("D")) {
+
+            System.out.println("Dynamic Solution: " + kp.dynamicSolve());
+        }
         else if (args[1].equals("F")) { return; }
 
     }
