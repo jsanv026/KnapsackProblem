@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Item {
+    - String name
+    - int weight, value
+
+    + Item(String name, int value, int weight)
+    + String getName()
+    + int getValue()
+    + int getWeight()
+
+}
+
+class Knapsack {
+
+    - Item[] items;
+    - int capacity,size;
+    - int[] values, weights;
+
+    + Knapsack(Item[] items, int capacity)
+    + int getCapacity()
+    + Item[] getItems()
+    + int size()
+    + int[] getValues()
+    + int[] getWeights()
+    + String toString()
+    - void setupArr()
+
+}
+
+class KTable {
+
+    - int[][] table
+
+    + KTable(int x, int y)
+    + int get(int x, int y)
+    + void set(int x, int y, int value)
+
+}
+
+class KnapsackProblem {
+
+    - int capacity, numItems, solSize
+    - int[] selected
+    - Knapsack knapsack
+    - String fileName
+    - KTable table
+
+    + KnapsackProblem(Knapsack k, String fileName)
+    + int dynamicSolve()
+    + int bruteForce()
+    + void writeTo()
+    - int bruteForce(int capacity, int[] weights, int[] values, int numItems)
+    - int getSolIndices()
+
+}
+
+Knapsack "1" -- "many" Item : contains
+KnapsackProblem "1" -- "1" Knapsack
+KnapsackProblem "1" -- "1" KTable
+
+@enduml

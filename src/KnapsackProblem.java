@@ -18,7 +18,7 @@ public class KnapsackProblem {
         numItems = k.size();
         this.fileName = fileName;
         table = new KTable(numItems + 1, capacity + 1);
-        k.display();
+        System.out.println(k);
 
     }
 
@@ -27,23 +27,22 @@ public class KnapsackProblem {
         int[] values = knapsack.getValues();
         int[] weights = knapsack.getWeights();
 
-        // Taken from geeksforgeeks.org with minor tweaks ---> https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
+        // Taken from geeksforgeeks with minor tweaks ---> https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
         for (int i = 0 ; i <= numItems ; ++i) {
             for (int j = 0 ; j <= capacity ; ++j) {
 
-                if (i == 0 || j == 0) { table.get()[i][j] = 0; }
-                else if (weights[i - 1] <= j) { table.get()[i][j] = Math.max(values[i - 1] + table.get()[i - 1][j - weights[i - 1]], table.get()[i - 1][j]); }
-                else { table.get()[i][j] = table.get()[i - 1][j]; }
+                if (i == 0 || j == 0) { table.set(i, j, 0); }
+                else if (weights[i - 1] <= j) { table.set(i, j, Math.max(values[i - 1] + table.get(i-1, j-weights[i-1]), table.get(i-1, j))); }
+                else { table.set(i, j, table.get(i-1, j)); }
 
             }
         }
 
-        return table.get()[numItems][capacity];
-
+        return table.get(numItems, capacity);
+        // End of copied code
     }
 
     public int bruteForce() { return bruteForce(capacity, knapsack.getWeights(), knapsack.getValues(), numItems); }
-
 
     private int bruteForce(int capacity, int[] weights, int[] values, int numItems) {
 
@@ -53,9 +52,10 @@ public class KnapsackProblem {
         if (weights[numItems - 1] > capacity) { return bruteForce(capacity, weights, values, numItems - 1); }
         else { return Math.max(values[numItems - 1] + bruteForce(capacity - weights[numItems - 1], weights, values, numItems - 1),
                     bruteForce(capacity, weights, values, numItems - 1)); }
-
+        // End of copied code
     }
 
+    // Method that writes solutions to a .sol file
     public void writeTo() throws IOException {
 
         FileWriter fw = new FileWriter(fileName.split("[.]")[0].concat(".sol"));
@@ -68,6 +68,7 @@ public class KnapsackProblem {
 
     }
 
+    // Method that gets the array of the indices of the solutions
     private void getSolIndices() {
 
         int[] values = knapsack.getValues();
@@ -77,15 +78,16 @@ public class KnapsackProblem {
         selected = new int[numItems + 1];
         int tmp = capacity;
         solSize = 0;
+
         for (int i = numItems ; i > 0 ; --i) {
-            if ((tmp - weights[i - 1] >= 0) && (table.get()[i][tmp] - table.get()[i - 1][tmp - weights[i - 1]] == values[i - 1])) {
+            if ((tmp - weights[i - 1] >= 0) && (table.get(i, tmp) - table.get(i-1, tmp-weights[i-1]) == values[i - 1])) {
                 selected[solSize++] = i - 1;
                 tmp -= weights[i - 1];
             }
         }
 
         for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
-
+        // End of copied code
     }
 
     ///////////////////////////// Main ////////////////////////////////
@@ -120,7 +122,7 @@ public class KnapsackProblem {
             System.out.println("Brute Force Solution: " + kp.bruteForce());
             kp.writeTo();
 
-        }
+        } else { throw new Exception("Invalid flag: " + args[1] + ". Use 'F' or 'D'."); }
 
     }
 
