@@ -4,6 +4,13 @@ public class Knapsack {
     private int capacity,size;
     private int[] values, weights;
 
+    public Knapsack() {
+
+        capacity = 0;
+        size = 0;
+
+    }
+
     public Knapsack(Item[] items, int capacity) {
 
         this.items = items;
@@ -31,6 +38,21 @@ public class Knapsack {
     public int size() { return size; }
     public int[] getValues() { return values; }
     public int[] getWeights() { return weights; }
+
+    public int sumWeights() {
+
+        int sum = 0;
+        for (int w : weights) { sum += w; }
+        return sum;
+
+    }
+
+    public Knapsack max(Knapsack k, int i) {
+
+        if (this.sumWeights() >= k.sumWeights() + i) { return this; }
+        return k;
+
+    }
 
     // Method to create value and weights array from Item[]
     private void setupArr() {

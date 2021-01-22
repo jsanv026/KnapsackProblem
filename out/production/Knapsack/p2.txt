@@ -1,0 +1,13 @@
+11
+laptop 40 112
+hoodie 39 80
+ua_long_sleeve 38 305
+leggings 37 185
+racerback 36 174
+travel_kit 35 665
+roost_stand 34 170
+bluetooth_keyboard 33 460
+plusslim_hard_disk 32 159
+denim_shorts 31 197
+nike_pro_shorts 30 112
+2000

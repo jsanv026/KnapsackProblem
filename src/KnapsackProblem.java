@@ -29,16 +29,17 @@ public class KnapsackProblem {
 
         // Taken from geeksforgeeks with minor tweaks ---> https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
         for (int i = 0 ; i <= numItems ; ++i) {
+            Knapsack k = new Knapsack();
             for (int j = 0 ; j <= capacity ; ++j) {
 
-                if (i == 0 || j == 0) { table.set(i, j, 0); }
-                else if (weights[i - 1] <= j) { table.set(i, j, Math.max(values[i - 1] + table.get(i-1, j-weights[i-1]), table.get(i-1, j))); }
-                else { table.set(i, j, table.get(i-1, j)); }
+                if (i == 0 || j == 0) { table.set(i, j, new Knapsack()); }
+                else if (weights[i] > j) { table.set(i, j, table.get(i-1, j)); }
+                else { table.set(i, j, table.get(i-1,j).max(table.get(i-1,j-weights[i]), values[i])); }
 
             }
         }
 
-        return table.get(numItems, capacity);
+        return table.get(numItems, capacity).sumWeights();
         // End of copied code
     }
 
@@ -60,7 +61,7 @@ public class KnapsackProblem {
 
         FileWriter fw = new FileWriter(fileName.split("[.]")[0].concat(".sol"));
         fw.write(dynamicSolve() + "\n");
-        getSolIndices();
+        //getSolIndices();
 
         for (int i = solSize - 1 ; i >= 0 ; --i) { fw.write(knapsack.getItems()[selected[i]].getName() + " "); }
 
@@ -68,33 +69,33 @@ public class KnapsackProblem {
 
     }
 
-    // Method that gets the array of the indices of the solutions
-    private void getSolIndices() {
-
-        int[] values = knapsack.getValues();
-        int[] weights = knapsack.getWeights();
-
-        // Taken from stackexchange with minor tweaks ---> https://stackoverflow.com/questions/45405662/how-to-return-the-weight-and-the-corresponding-index-in-this-knapsack-java-code
-        selected = new int[numItems + 1];
-        int tmp = capacity;
-        solSize = 0;
-
-        for (int i = numItems ; i > 0 ; --i) {
-            if ((tmp - weights[i - 1] >= 0) && (table.get(i, tmp) - table.get(i-1, tmp-weights[i-1]) == values[i - 1])) {
-                selected[solSize++] = i - 1;
-                tmp -= weights[i - 1];
-            }
-        }
-
-        for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
-        // End of copied code
-    }
+    // Method that gets the array of indices of the solutions
+//    private void getSolIndices() {
+//
+//        int[] values = knapsack.getValues();
+//        int[] weights = knapsack.getWeights();
+//
+//        // Taken from stackexchange with minor tweaks ---> https://stackoverflow.com/questions/45405662/how-to-return-the-weight-and-the-corresponding-index-in-this-knapsack-java-code
+//        selected = new int[numItems + 1];
+//        int tmp = capacity;
+//        solSize = 0;
+//
+//        for (int i = numItems ; i > 0 ; --i) {
+//            if ((tmp - weights[i - 1] >= 0) && (table.get(i, tmp) - table.get(i-1, tmp-weights[i-1]) == values[i - 1])) {
+//                selected[solSize++] = i - 1;
+//                tmp -= weights[i - 1];
+//            }
+//        }
+//
+//        for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
+//        // End of copied code
+//    }
 
     ///////////////////////////// Main ////////////////////////////////
 
     public static void main(String[] args) throws Exception {
 
-        if (args.length < 2 || args.length > 2) { throw new Exception("Argument length of only 2 is required"); }
+        if (args.length != 2) { throw new Exception("Argument length of only 2 is required"); }
 
         File f = new File(args[0]);
         Scanner s = new Scanner(f);
@@ -112,12 +113,12 @@ public class KnapsackProblem {
         Knapsack k = new Knapsack(items, s.nextInt());
         KnapsackProblem kp = new KnapsackProblem(k, args[0]);
 
-        if (args[1].equals("D")) {
+        if (args[1].toUpperCase().equals("D")) {
 
             System.out.println("Dynamic Solution: " + kp.dynamicSolve());
             kp.writeTo();
 
-        } else if (args[1].equals("F")) {
+        } else if (args[1].toUpperCase().equals("F")) {
 
             System.out.println("Brute Force Solution: " + kp.bruteForce());
             kp.writeTo();
