@@ -51,13 +51,14 @@ class KnapsackProblem {
     + int dynamicSolve()
     + int bruteForce()
     + void writeTo()
+    + void main(String[] args)
     - int bruteForce(int capacity, int[] weights, int[] values, int numItems)
     - int getSolIndices()
 
 }
 
-Knapsack "1" -- "*" Item
-KnapsackProblem "1" -- "1" Knapsack
-KnapsackProblem "1" -- "1" KTable
+Item "0..*" -- " " Knapsack
+Knapsack "0..1" -- " " KnapsackProblem
+KTable "0..1" -- " " KnapsackProblem
 
 @enduml

@@ -1,5 +1,5 @@
 /**
- *CSI 2120 - Comprehensive Assignment 0
+ *CSI 2120 - Comprehensive Assignment 1
  *@author John Sanvictores 300014321
  * NOTE: there are snippets of code below that have been referenced
  * from the following websites:
