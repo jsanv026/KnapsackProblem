@@ -1,7 +1,13 @@
+/**
+ *CSI 2120 - Comprehensive Assignment 0
+ *@author John Sanvictores 300014321
+ */
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class KnapsackProblem {
 
@@ -26,19 +32,74 @@ public class KnapsackProblem {
 
         int[] values = knapsack.getValues();
         int[] weights = knapsack.getWeights();
+        ArrayList<Item> items = knapsack.getItems();
+        System.out.println(items);
+
+        String[] names = knapsack.getNames();
 
         // Taken from geeksforgeeks with minor tweaks ---> https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
         for (int i = 0 ; i <= numItems ; ++i) {
-            Knapsack k = new Knapsack();
             for (int j = 0 ; j <= capacity ; ++j) {
 
+                print("i j " + i + " " + j);
+
                 if (i == 0 || j == 0) { table.set(i, j, new Knapsack()); }
-                else if (weights[i] > j) { table.set(i, j, table.get(i-1, j)); }
-                else { table.set(i, j, table.get(i-1,j).max(table.get(i-1,j-weights[i]), values[i])); }
+
+                else if (weights[i - 1] <= j) {
+
+                    Knapsack k = new Knapsack(table.get(i-1,j));
+                    System.out.println("weight: " + weights[i]);
+                    System.out.println("j: " + j);
+
+                    int a = table.get(i-1,j).sumWeights();
+                    int b = values[i-1] + table.get(i-1, j-weights[i-1]).sumWeights();
+
+                    if (a > b) {
+                        k.add(items.get(i-1));
+                    } else {
+                        k.add(items.get(i));
+                    }
+
+                    table.set(i,j, k);
+                    System.out.println("set: " + k);
+
+                } else {
+
+                    table.set(i, j, table.get(i-1,j));
+
+                }
+
+//                if (i == 0 || j == 0) {
+//
+//                    table.set(i, j, new Knapsack());
+//                    print("\nBase case");
+//                    System.out.println(table.get(i,j));
+//
+//
+//                }
+//
+//                else if (weights[i-1] <= j) {
+//
+//                    print("\n2nd Case");
+//                    table.set(i, j, table.get(i-1,j).max(table.get(i-1,j-weights[i-1]), values[i-1]));
+//                    System.out.println(table.get(i,j));
+//
+//                }
+//
+//                //table.set(i, j, Math.max(values[i - 1] + table.get(i-1, j-weights[i-1]), table.get(i-1, j)));
+//                else {
+//
+//                    print("\nLast Case");
+//                    table.set(i, j, table.get(i-1, j));
+//                    System.out.println(table.get(i,j));
+//
+//                }
 
             }
         }
 
+        System.out.println("Solution: " +
+                            table.get(numItems,capacity));
         return table.get(numItems, capacity).sumWeights();
         // End of copied code
     }
@@ -63,7 +124,7 @@ public class KnapsackProblem {
         fw.write(dynamicSolve() + "\n");
         //getSolIndices();
 
-        for (int i = solSize - 1 ; i >= 0 ; --i) { fw.write(knapsack.getItems()[selected[i]].getName() + " "); }
+        //for (int i = solSize - 1 ; i >= 0 ; --i) { fw.write(knapsack.getItems().get(selected[i]).getName() + " "); }
 
         fw.close();
 
@@ -90,6 +151,8 @@ public class KnapsackProblem {
 //        for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
 //        // End of copied code
 //    }
+
+    private void print(String str) { System.out.println(str); }
 
     ///////////////////////////// Main ////////////////////////////////
 
