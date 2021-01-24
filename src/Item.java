@@ -1,3 +1,8 @@
+/**
+ *CSI 2120 - Comprehensive Assignment 0
+ *@author John Sanvictores 300014321
+ */
+
 public class Item {
 
     private String name;

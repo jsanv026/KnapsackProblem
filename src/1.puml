@@ -56,7 +56,7 @@ class KnapsackProblem {
 
 }
 
-Knapsack "1" -- "many" Item : contains
+Knapsack "1" -- "*" Item
 KnapsackProblem "1" -- "1" Knapsack
 KnapsackProblem "1" -- "1" KTable
 

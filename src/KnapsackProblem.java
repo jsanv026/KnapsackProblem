@@ -1,3 +1,12 @@
+/**
+ *CSI 2120 - Comprehensive Assignment 0
+ *@author John Sanvictores 300014321
+ * NOTE: there are snippets of code below that have been referenced
+ * from the following websites:
+ * https://www.geeksforgeeks.org/java-program-for-dynamic-programming-set-10-0-1-knapsack-problem/
+ * https://stackoverflow.com/questions/45405662/how-to-return-the-weight-and-the-corresponding-index-in-this-knapsack-java-code
+ */
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +40,7 @@ public class KnapsackProblem {
         for (int i = 0 ; i <= numItems ; ++i) {
             for (int j = 0 ; j <= capacity ; ++j) {
 
+                // Base case where no items are added or knapsack has 0 capacity
                 if (i == 0 || j == 0) { table.set(i, j, 0); }
                 else if (weights[i - 1] <= j) { table.set(i, j, Math.max(values[i - 1] + table.get(i-1, j-weights[i-1]), table.get(i-1, j))); }
                 else { table.set(i, j, table.get(i-1, j)); }
@@ -39,9 +49,10 @@ public class KnapsackProblem {
         }
 
         return table.get(numItems, capacity);
-        // End of copied code
+        // End of referenced code
     }
 
+    // Initial case for brute force (root)
     public int bruteForce() { return bruteForce(capacity, knapsack.getWeights(), knapsack.getValues(), numItems); }
 
     private int bruteForce(int capacity, int[] weights, int[] values, int numItems) {
@@ -52,7 +63,7 @@ public class KnapsackProblem {
         if (weights[numItems - 1] > capacity) { return bruteForce(capacity, weights, values, numItems - 1); }
         else { return Math.max(values[numItems - 1] + bruteForce(capacity - weights[numItems - 1], weights, values, numItems - 1),
                     bruteForce(capacity, weights, values, numItems - 1)); }
-        // End of copied code
+        // End of referenced code
     }
 
     // Method that writes solutions to a .sol file
@@ -86,14 +97,18 @@ public class KnapsackProblem {
             }
         }
 
-        for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.println("Item: " + knapsack.getItems()[selected[i]].getName()); }
-        // End of copied code
+        System.out.print("[ ");
+        for (int i = solSize - 1 ; i >= 0 ; --i) { System.out.print(knapsack.getItems()[selected[i]].getName() + " "); }
+        System.out.print("]");
+
+        // End of referenced code
     }
 
     ///////////////////////////// Main ////////////////////////////////
 
     public static void main(String[] args) throws Exception {
 
+        // Checking if arguments in command line are valid
         if (args.length < 2 || args.length > 2) { throw new Exception("Argument length of only 2 is required"); }
 
         File f = new File(args[0]);
@@ -112,12 +127,12 @@ public class KnapsackProblem {
         Knapsack k = new Knapsack(items, s.nextInt());
         KnapsackProblem kp = new KnapsackProblem(k, args[0]);
 
-        if (args[1].equals("D")) {
+        if (args[1].toUpperCase().equals("D")) {
 
             System.out.println("Dynamic Solution: " + kp.dynamicSolve());
             kp.writeTo();
 
-        } else if (args[1].equals("F")) {
+        } else if (args[1].toUpperCase().equals("F")) {
 
             System.out.println("Brute Force Solution: " + kp.bruteForce());
             kp.writeTo();
